@@ -12,3 +12,6 @@ class Sidebar:
 
     def open_accounts(self) -> None:
         self.accounts_link.click()
+
+    def open_transfer(self) -> None:
+        self.transfer_link.click()

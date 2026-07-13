@@ -1,9 +1,13 @@
-from playwright.sync_api import Page, expect
 from decimal import Decimal
+
+from playwright.sync_api import Page, expect
+
 from components.sidebar import Sidebar
 
 
 class AccountsPage:
+    BALANCE_CELL_INDEX = 2
+
     def __init__(self, page: Page) -> None:
         self.page = page
         self.sidebar = Sidebar(page)
@@ -13,8 +17,10 @@ class AccountsPage:
         expect(self.accounts_heading).to_be_visible()
 
     def get_account_balance(self, account_name: str) -> Decimal:
-        checking_row = self.page.get_by_role("row").filter(has_text=account_name)
-        cells = checking_row.get_by_role("cell")
-        balance_cell = 2
-        print(balance_cell, "-->", cells.nth(balance_cell).inner_text())
-        pass
+        account_row = self.page.get_by_role("row").filter(has_text=account_name)
+        cells = account_row.get_by_role("cell")
+        balance_text = cells.nth(self.BALANCE_CELL_INDEX).inner_text()
+
+        fixed_balance = balance_text.replace("$", "").replace(",", "")
+
+        return Decimal(fixed_balance)
