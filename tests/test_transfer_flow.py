@@ -1,34 +1,48 @@
+from decimal import Decimal
+import pytest
+
 from playwright.sync_api import Page, expect
 
 from pages.login_page import LoginPage
 from pages.dashboard_page import DashboardPage
 from pages.accounts_page import AccountsPage
 from pages.transfer_page import TransferPage
+from pages.transactions_page import TransactionsPage
 
-# Login
-# → Dashboard
-# → Accounts
-# → קריאת יתרת חשבון מקור
-# → קריאת יתרת חשבון יעד
-# → Transfer
-# → קריאת היתרות שוב
-# → השוואה
-
+@pytest.mark.parametrize(
+    "source_account,destination_account,amount",
+    [
+        (
+            "Everyday Checking",
+            "High-Yield Savings",
+            Decimal("1000.00"),
+        ),
+    ],
+    # ids provides a clear name to the report data set
+    ids=["checking-to-savings-1000"],
+)
 
 def test_successful_account_transfer(
     page: Page,
     app_url: str,
+    bank_credentials: tuple[str, str],
+    source_account: str,
+    destination_account: str,
+    amount: Decimal,
 ) -> None:
 
     login_page = LoginPage(page)
     dashboard_page = DashboardPage(page)
     accounts_page = AccountsPage(page)
     transfer_page = TransferPage(page)
+    transactions_page = TransactionsPage(page)
+
+    username, password = bank_credentials
 
     login_page.open(app_url)
     login_page.login(
-        "standard_user",
-        "bank_sauce",
+        username,
+        password,
     )
 
     dashboard_page.expect_loaded()
@@ -36,36 +50,60 @@ def test_successful_account_transfer(
     dashboard_page.sidebar.open_accounts()
     accounts_page.expect_loaded()
 
-    # hardcoded
-    account_name = "Everyday Checking"
-    recipient_name = "High-Yield Savings"
-    #
-    account_balance = accounts_page.get_account_balance(account_name)
+    source_balance_before = accounts_page.get_account_balance(
+        source_account
+    )
+
+    destination_balance_before = accounts_page.get_account_balance(
+        destination_account
+    )
 
     accounts_page.sidebar.open_transfer()
     transfer_page.expect_loaded()
 
-    ########### [ TEMP CODE ]
-    amount = 1000
-    print("Account balance is:", account_balance)
-    print("Transfer Amount is: ", amount)
-    transfer_page.transfer_money(account_name, recipient_name, str(amount))
+    transfer_page.transfer_money(
+        source_account,
+        destination_account,
+        str(amount),
+    )
 
     transfer_page.sidebar.open_accounts()
     accounts_page.expect_loaded()
-    account_balance = accounts_page.get_account_balance(account_name)
 
-    print("NEW Account balance is:", account_balance)
-    # name="Everyday Checking"
+    source_balance_after = accounts_page.get_account_balance(
+        source_account
+    )
 
-    # cells = checking_row.get_by_role("cell")
-    # print("num of cells:", cells.count())
-    # balance_cell = 2
-    # print(balance_cell, "-->", cells.nth(balance_cell).inner_text())
+    destination_balance_after = accounts_page.get_account_balance(
+        destination_account
+    )
 
-    # # print("Matching rows:", checking_row.count())
-    # print("Checking row text:")
-    # print(checking_row.inner_text())
+    assert source_balance_after == source_balance_before - amount
+    assert destination_balance_after == destination_balance_before + amount
 
+    accounts_page.sidebar.open_transactions()
+    transactions_page.expect_loaded()
 
-###########
+    debit_row = transactions_page.get_transfer_row(
+        source_account,
+        f"Transfer to {destination_account}",
+    )
+
+    credit_row = transactions_page.get_transfer_row(
+        destination_account,
+        f"Transfer from {source_account}",
+    )
+
+    expect(debit_row).to_be_visible()
+    expect(credit_row).to_be_visible()
+
+    debit_amount = transactions_page.get_transaction_amount(
+        debit_row
+    )
+
+    credit_amount = transactions_page.get_transaction_amount(
+        credit_row
+    )
+
+    assert debit_amount == -amount
+    assert credit_amount == amount

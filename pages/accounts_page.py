@@ -3,6 +3,7 @@ from decimal import Decimal
 from playwright.sync_api import Page, expect
 
 from components.sidebar import Sidebar
+from utils.money import parse_money
 
 
 class AccountsPage:
@@ -21,10 +22,17 @@ class AccountsPage:
 
     def get_account_balance(self, account_name: str) -> Decimal:
         """Return the displayed balance for the requested account as Decimal."""
-        account_row = self.page.get_by_role("row").filter(has_text=account_name)
+        
+        account_row = self.page.get_by_role("row").filter(
+            has_text=account_name
+        )
+
         cells = account_row.get_by_role("cell")
-        balance_text = cells.nth(self.BALANCE_CELL_INDEX).inner_text()
+        
+        balance_text = cells.nth(
+            self.BALANCE_CELL_INDEX
+        ).inner_text()
 
-        fixed_balance = balance_text.replace("$", "").replace(",", "")
 
-        return Decimal(fixed_balance)
+        return parse_money(balance_text)
+

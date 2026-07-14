@@ -19,3 +19,6 @@ class Sidebar:
     def open_transfer(self) -> None:
         """Navigate to the internal transfer page."""
         self.transfer_link.click()
+
+    def open_transactions(self) -> None:
+        self.transactions_link.click()
