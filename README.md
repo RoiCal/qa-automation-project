@@ -42,7 +42,8 @@ qa-automation-project/
 │   ├── test_smoke.py
 │   └── test_transfer_flow.py
 ├── utils/
-│   └── money.py
+│   ├── money.py
+│   └── test_data_loader.py
 ├── test_data/
 │   └── transfer_cases.json
 ├── conftest.py

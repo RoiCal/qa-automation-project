@@ -1,6 +1,6 @@
 import json
-from pathlib import Path # provide a generic path
-from typing import Any # for flexabilty but is not type safe
+from pathlib import Path 
+from typing import Any
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
