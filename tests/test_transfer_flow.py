@@ -1,5 +1,7 @@
 from decimal import Decimal
 import pytest
+import pytest_html
+from collections.abc import Callable
 
 from playwright.sync_api import Page, expect
 
@@ -31,7 +33,10 @@ def test_successful_account_transfer(
     source_account: str,
     destination_account: str,
     amount: Decimal,
+    report_step: Callable[[str], None],
 ) -> None:
+
+    test_steps = []
 
     login_page = LoginPage(page)
     dashboard_page = DashboardPage(page)
@@ -49,6 +54,10 @@ def test_successful_account_transfer(
 
     dashboard_page.expect_loaded()
 
+    report_step(
+        "Login completed successfully and the dashboard was displayed."
+    )
+
     dashboard_page.sidebar.open_accounts()
     accounts_page.expect_loaded()
 
@@ -60,6 +69,12 @@ def test_successful_account_transfer(
         destination_account
     )
 
+    report_step(
+        f"Initial balances were read: "
+        f"{source_account} = {source_balance_before}, "
+        f"{destination_account} = {destination_balance_before}."
+    )
+
     accounts_page.sidebar.open_transfer()
     transfer_page.expect_loaded()
 
@@ -67,6 +82,11 @@ def test_successful_account_transfer(
         source_account,
         destination_account,
         str(amount),
+    )
+
+    report_step(
+        f"Transferred {amount} from "
+        f"{source_account} to {destination_account}."
     )
 
     transfer_page.sidebar.open_accounts()
@@ -82,6 +102,12 @@ def test_successful_account_transfer(
 
     assert source_balance_after == source_balance_before - amount
     assert destination_balance_after == destination_balance_before + amount
+
+    report_step(
+        f"Balances were updated correctly: "
+        f"{source_account} = {source_balance_after}, "
+        f"{destination_account} = {destination_balance_after}."
+    )
 
     accounts_page.sidebar.open_transactions()
     transactions_page.expect_loaded()
@@ -109,3 +135,8 @@ def test_successful_account_transfer(
 
     assert debit_amount == -amount
     assert credit_amount == amount
+
+    report_step(
+        f"Transaction history was verified: "
+        f"debit = {debit_amount}, credit = {credit_amount}."
+    )
