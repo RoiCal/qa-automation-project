@@ -23,7 +23,7 @@ def test_successful_account_transfer(
     login_page = LoginPage(page)
     dashboard_page = DashboardPage(page)
     accounts_page = AccountsPage(page)
-    transfare_page = TransferPage(page)
+    transfer_page = TransferPage(page)
 
     login_page.open(app_url)
     login_page.login(
@@ -43,11 +43,19 @@ def test_successful_account_transfer(
     account_balance = accounts_page.get_account_balance(account_name)
 
     accounts_page.sidebar.open_transfer()
-    transfare_page.expected_loaded()
+    transfer_page.expect_loaded()
 
     ########### [ TEMP CODE ]
+    amount = 1000
     print("Account balance is:", account_balance)
-    transfare_page.transfer_money(account_name, recipient_name, 1000)
+    print("Transfer Amount is: ", amount)
+    transfer_page.transfer_money(account_name, recipient_name, str(amount))
+
+    transfer_page.sidebar.open_accounts()
+    accounts_page.expect_loaded()
+    account_balance = accounts_page.get_account_balance(account_name)
+
+    print("NEW Account balance is:", account_balance)
     # name="Everyday Checking"
 
     # cells = checking_row.get_by_role("cell")

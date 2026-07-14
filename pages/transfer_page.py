@@ -11,7 +11,7 @@ class TransferPage:
         self.sidebar = Sidebar(page)
         self.transfer_heading = page.get_by_test_id("transfer-page-title")
 
-    def expected_loaded(self) -> None:
+    def expect_loaded(self) -> None:
         expect(self.transfer_heading).to_be_visible()
 
     def transfer_money(self, sender: str, recipient: str, amount: str) -> None:
