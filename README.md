@@ -178,42 +178,6 @@ Open a trace file with:
 playwright show-trace path/to/trace.zip
 ```
 
-## Test Design
-
-The project uses the Page Object Model.
-
-The main folders are:
-
-- `pages/`      for page actions and locators
-- `components/` for reusable page components
-- `tests/`      for test scenarios and assertions
-- `utils/`      for helper functions
-- `conftest.py` for shared pytest fixtures
-
-## Test Data
-
-The transfer test uses parameterization for:
-
-- Source account
-- Destination account
-- Transfer amount
-
-The login credentials are read from the `.env` file.
-
-## Stability
-
-The test does not depend on fixed account balances.
-
-It reads the balances before the transfer and compares them with the balances after the transfer.
-
-## Main Test
-
-The main test is located in:
-
-```text
-tests/test_transfer_flow.py
-```
-
 ## Repository
 
 https://github.com/RoiCal/qa-automation-project
