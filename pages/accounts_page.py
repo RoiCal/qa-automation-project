@@ -28,11 +28,9 @@ class AccountsPage:
         )
 
         cells = account_row.get_by_role("cell")
-        
         balance_text = cells.nth(
             self.BALANCE_CELL_INDEX
         ).inner_text()
-
 
         return parse_money(balance_text)
 

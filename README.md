@@ -109,9 +109,10 @@ Add the following values:
 
 ```env
 BASE_URL=https://qaplayground.com/bank
-BANK_USERNAME=standard_user
-BANK_PASSWORD=bank_sauce
+BANK_USERNAME=<your-username>
+BANK_PASSWORD=<your-password>
 ```
+Credentials is provided by the QA Playground Bank application at the bottom.
 
 The `.env` file is ignored by Git and is not uploaded to the repository.
 

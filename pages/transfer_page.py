@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from playwright.sync_api import Page, expect
 
 from components.sidebar import Sidebar
@@ -19,8 +17,14 @@ class TransferPage:
         self.page.get_by_text(sender).click()
 
         self.page.get_by_test_id("transfer-to-select").click()
-        self.page.get_by_test_id("transfer-to-option").get_by_text(recipient)
-        self.page.get_by_test_id("transfer-to-option").click()
+    
+        recipient_option = self.page.get_by_test_id(
+            "transfer-to-option"
+        ).filter(
+            has_text=recipient
+        ) 
+
+        recipient_option.click()
 
         self.page.get_by_test_id("transfer-amount-input").click()
         self.page.get_by_test_id("transfer-amount-input").fill(amount)

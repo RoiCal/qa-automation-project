@@ -7,12 +7,12 @@ load_dotenv()
 
 @pytest.fixture(scope="session")
 def app_url() -> str:
-	url = os.getenv("BASE_URL")
+    url = os.getenv("BASE_URL")
 
-	if not url:
-		raise ValueError("BASE_URL is not defined in the .env file")
-	
-	return url
+    if not url:
+        raise ValueError("BASE_URL is not defined in the .env file")
+    
+    return url
 
 @pytest.fixture(scope="session")
 def bank_credentials() -> tuple[str, str]:
