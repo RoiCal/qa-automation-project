@@ -112,8 +112,7 @@ BASE_URL=https://qaplayground.com/bank
 BANK_USERNAME=<your-username>
 BANK_PASSWORD=<your-password>
 ```
-Credentials is provided by the QA Playground Bank application at the bottom.
-
+The login credentials are provided at the bottom of the QA Playground Bank login page.
 The `.env` file is ignored by Git and is not uploaded to the repository.
 
 ## Running the Tests

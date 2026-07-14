@@ -11,8 +11,9 @@ def app_url() -> str:
 
     if not url:
         raise ValueError("BASE_URL is not defined in the .env file")
-    
+
     return url
+
 
 @pytest.fixture(scope="session")
 def bank_credentials() -> tuple[str, str]:

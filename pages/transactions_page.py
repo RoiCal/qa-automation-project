@@ -9,7 +9,7 @@ from utils.money import parse_money
 class TransactionsPage:
     """Provides transaction-history interactions and assertions."""
 
-    AMOUNT_CELL_INDEX = 4 
+    AMOUNT_CELL_INDEX = 4
 
     def __init__(self, page: Page) -> None:
         self.page = page
@@ -40,7 +40,7 @@ class TransactionsPage:
         transaction_row: Locator,
     ) -> Decimal:
         """Return the amount displayed in the requested transaction row."""
-       
+
         cells = transaction_row.get_by_role("cell")
 
         amount_text = cells.nth(
