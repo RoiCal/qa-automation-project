@@ -43,6 +43,8 @@ qa-automation-project/
 │   └── test_transfer_flow.py
 ├── utils/
 │   └── money.py
+├── test_data/
+│   └── transfer_cases.json
 ├── conftest.py
 ├── pytest.ini
 ├── requirements.txt
@@ -157,7 +159,8 @@ Open the report on Windows:
 start reports\report.html
 ```
 
-The report shows the test name, result and execution time.
+The report shows the test name, execution status, duration, test steps,
+and the actual values collected during the test.
 
 ## Failure Files
 

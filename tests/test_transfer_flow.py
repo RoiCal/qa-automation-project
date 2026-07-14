@@ -1,29 +1,31 @@
 from decimal import Decimal
-import pytest
-import pytest_html
 from collections.abc import Callable
 
+import pytest
 from playwright.sync_api import Page, expect
 
+from utils.test_data_loader import load_json_test_data
 from pages.login_page import LoginPage
 from pages.dashboard_page import DashboardPage
 from pages.accounts_page import AccountsPage
 from pages.transfer_page import TransferPage
 from pages.transactions_page import TransactionsPage
 
+TRANSFER_CASES = load_json_test_data(
+    "test_data/transfer_cases.json"
+)
 
-##TODO change the hardcoded accounts and amount to a test_data file 
 @pytest.mark.parametrize(
     "source_account,destination_account,amount",
     [
-        (
-            "Everyday Checking",
-            "High-Yield Savings",
-            Decimal("1000.00"),
-        ),
+        pytest.param(
+            test_case["source_account"],
+            test_case["destination_account"],
+            Decimal(test_case["amount"]),
+            id=test_case["id"],
+        )
+        for test_case in TRANSFER_CASES
     ],
-    # ids provides a clear name to the report data set
-    ids=["checking-to-savings-1000"],
 )
 
 def test_successful_account_transfer(
@@ -35,8 +37,6 @@ def test_successful_account_transfer(
     amount: Decimal,
     report_step: Callable[[str], None],
 ) -> None:
-
-    test_steps = []
 
     login_page = LoginPage(page)
     dashboard_page = DashboardPage(page)

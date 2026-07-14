@@ -1,0 +1,14 @@
+[
+    {
+        "id": "checking-to-savings-100",
+        "source_account": "Everyday Checking",
+        "destination_account": "High-Yield Savings",
+        "amount": "100.00"
+    },
+    {
+        "id": "savings-to-checking-50",
+        "source_account": "High-Yield Savings",
+        "destination_account": "Everyday Checking",
+        "amount": "50.00"
+    }
+]
