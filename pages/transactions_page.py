@@ -14,6 +14,7 @@ class TransactionsPage:
     def __init__(self, page: Page) -> None:
         self.page = page
         self.sidebar = Sidebar(page)
+
         self.transactions_heading = page.get_by_test_id(
             "transactions-page-title"
         )
@@ -43,6 +44,8 @@ class TransactionsPage:
 
         cells = transaction_row.get_by_role("cell")
 
+        expect(cells).to_have_count(self.AMOUNT_CELL_INDEX)
+        
         amount_text = cells.nth(
             self.AMOUNT_CELL_INDEX
         ).inner_text()

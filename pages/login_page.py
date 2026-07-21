@@ -6,9 +6,17 @@ class LoginPage:
 
     def __init__(self, page: Page) -> None:
         self.page = page
-        self.username_input = page.get_by_test_id("login-username-input")
-        self.password_input = page.get_by_test_id("login-password-input")
-        self.login_button = page.get_by_test_id("login-submit-btn")
+        self.username_input = page.get_by_test_id(
+            "login-username-input"
+        )
+
+        self.password_input = page.get_by_test_id(
+            "login-password-input"
+        )
+        
+        self.login_button = page.get_by_test_id(
+            "login-submit-btn"
+        )
 
     def open(self, app_url: str) -> None:
         """Open the login page using the configured application base URL."""

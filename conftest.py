@@ -43,7 +43,7 @@ def report_step(request: FixtureRequest) -> Callable[[str], None]:
 
     # Saves the steps on the current pytest test item.
     request.node.report_steps = steps
-
+    
     def add_step(description: str) -> None:
         """Add one numbered step to the current test report."""
         step_number = len(steps) + 1

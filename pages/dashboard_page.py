@@ -9,7 +9,10 @@ class DashboardPage:
     def __init__(self, page: Page) -> None:
         self.page = page
         self.sidebar = Sidebar(page)
-        self.dashboard_heading = page.get_by_test_id("dashboard-welcome-message")
+        
+        self.dashboard_heading = page.get_by_test_id(
+            "dashboard-welcome-message"
+        )
 
     def expect_loaded(self) -> None:
         """Verify that the dashboard's unique welcome element is visible."""

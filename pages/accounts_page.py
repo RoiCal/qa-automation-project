@@ -14,7 +14,10 @@ class AccountsPage:
     def __init__(self, page: Page) -> None:
         self.page = page
         self.sidebar = Sidebar(page)
-        self.accounts_heading = page.get_by_test_id("accounts-page-title")
+
+        self.accounts_heading = page.get_by_test_id(
+            "accounts-page-title"
+        )
 
     def expect_loaded(self) -> None:
         """Verify that the accounts page is displayed."""
@@ -28,9 +31,14 @@ class AccountsPage:
         )
 
         cells = account_row.get_by_role("cell")
-        balance_text = cells.nth(
+
+        balance_cell = cells.nth(
             self.BALANCE_CELL_INDEX
-        ).inner_text()
+        )
+
+        expect(balance_cell).to_be_visible()
+
+        balance_text = balance_cell.inner_text()
 
         return parse_money(balance_text)
 
